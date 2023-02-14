@@ -1,9 +1,14 @@
-import abi from "./contract/chai.json";
+import abi from "./contract/Token.json";
+import {BrowserRouter as Router,Routes,Route} from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import Buy from "./components/Buy";
 import Memos from "./components/Memos";
-import chai from "./chai.png";
+import Transfer from "./components/transfer";
+import Data from "./components/data";
+import Stock from "./components/Stock"
+import Ticker from "./components/ticker"
+import chai from "./AT.png";
 import "./App.css";
 
 function App() {
@@ -15,7 +20,7 @@ function App() {
   const [account, setAccount] = useState("None");
   useEffect(() => {
     const connectWallet = async () => {
-      const contractAddress = "0x4Ec2f0F25347ae7A757bbdf8fA41736318350921";
+      const contractAddress = "0x3F8fA000B9f8b23e023538081B48fC78eD07868d";//to change after deploying contract on hardhat
       const contractABI = abi.abi;
       try {
         const { ethereum } = window;
@@ -54,16 +59,29 @@ function App() {
   // console.log(state);
   return (
     <div style={{ backgroundColor: "#EFEFEF", height: "100%" }}>
-      <img src={chai} className="img-fluid" alt=".." width="100%" />
+
+      
+      <img src={chai} className="img-fluid" alt=".." width="100%"  />
       <p
         className="text-muted lead "
         style={{ marginTop: "10px", marginLeft: "5px" }}
-      >
+        >
         <small>Connected Account - {account}</small>
       </p>
-      <div className="container">
-        <Buy state={state} />
-        <Memos state={state} />
+      <div className="container-md">
+        <Router>
+          <Routes>
+            <Route exact path="/mint" element={<Buy state={state} />}></Route>
+            <Route exact path="/data" element={<Data state={state} />}></Route>
+            <Route exact path="/transfer" element={<Transfer state={state} />}></Route>
+            <Route exact path="/" element={<Memos state={state} />}></Route>
+            <Route exact path="/stock" element={<Stock state={state} />}></Route>
+            <Route exact path="/ticker" element={<Ticker state={state} />}></Route>
+          </Routes>
+          </Router>
+          
+        {/* <Buy state={state} />
+         <Memos state={state} />  */}
       </div>
     </div>
   );
